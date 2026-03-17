@@ -1,30 +1,36 @@
-# AgentSwarp Web
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-> SvelteKit frontend. Lightweight UI for creating and managing agents.
+## Getting Started
 
-## Overview
-
-`@agentswarm/web` is the browser-based interface for AgentSwarp. Built with SvelteKit for maximum performance and minimal bundle size.
-
-### Features
-
-- **Agent Dashboard** -- View, create, and manage your AI agents
-- **Visual Builder** -- No-code drag-and-drop agent builder (v0.2)
-- **Run History** -- See what your agents did and when
-- **Settings** -- Configure LLM providers, integrations, and preferences
-
-## Development
+First, run the development server:
 
 ```bash
-cd apps/web
-bun install
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
 bun dev
 ```
 
-The dev server starts at `http://localhost:5173` with hot module replacement.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Tech Stack
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-- [SvelteKit](https://kit.svelte.dev) -- Full-stack framework
-- [Tailwind CSS](https://tailwindcss.com) -- Utility-first styling
-- [TypeScript](https://typescriptlang.org) -- Type safety
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
