@@ -7,118 +7,527 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0f;--surface:#111118;--card:#16161f;--border:#222230;--text:#e8e8ed;--dim:#6b7280;--accent:#6366f1;--accent2:#8b5cf6;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--glow:rgba(99,102,241,.15)}
-*{transition:background .2s,border-color .2s}
+:root{
+  --bg:#0a0a0f;--surface:#111118;--card:#16161f;--border:#222230;
+  --text:#e8e8ed;--dim:#6b7280;--accent:#6366f1;--accent2:#8b5cf6;
+  --green:#22c55e;--red:#ef4444;--orange:#f59e0b;
+  --glow:rgba(99,102,241,.15);--sidebar-w:260px;
+}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:56px 1fr;height:100vh}
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:56px 1fr;height:100vh}
 @media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{display:none}}
 
-/* SIDEBAR */
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px;overflow-y:auto}
-.sidebar h2{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px}
+/* ============ SIDEBAR ============ */
+.sidebar{
+  background:var(--surface);border-right:1px solid var(--border);
+  padding:16px;overflow-y:auto;
+  transition:width .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);
+  position:relative;z-index:10;
+}
+.sidebar.collapsed{width:56px;padding:16px 8px}
+.sidebar.collapsed .sidebar-label,.sidebar.collapsed .sidebar-full{display:none}
+.sidebar.collapsed .nav-item{justify-content:center;padding:10px}
+.sidebar.collapsed .field{display:none}
+.sidebar-toggle{
+  position:absolute;top:12px;right:-14px;width:28px;height:28px;
+  background:var(--card);border:1px solid var(--border);border-radius:50%;
+  color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:12px;z-index:11;transition:transform .3s,background .2s;
+}
+.sidebar.collapsed .sidebar-toggle{right:-14px;transform:rotate(180deg)}
+.sidebar-toggle:hover{background:var(--accent);color:#fff}
+
+.sidebar h2{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin:20px 0 8px;white-space:nowrap}
 .sidebar h2:first-child{margin-top:0}
-.nav-item{padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:2px}
-.nav-item:hover{background:var(--card)}
-.nav-item.active{background:var(--accent);color:#fff}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.nav-item{
+  padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;gap:8px;margin-bottom:2px;
+  transition:background .2s,transform .15s,box-shadow .2s,color .2s;
+  white-space:nowrap;overflow:hidden;user-select:none;
+}
+.nav-item:hover{background:var(--card);transform:translateX(3px)}
+.nav-item:active{transform:scale(.97)}
+.nav-item.active{background:var(--accent);color:#fff;box-shadow:0 2px 12px var(--glow)}
+
+/* Status dots */
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;position:relative}
 .dot.on{background:var(--green)}
 .dot.off{background:var(--dim)}
+.dot.on::after{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:var(--green);opacity:0;animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.35;transform:scale(1.6)}}
 
-/* HEADER */
+/* ============ HEADER ============ */
 .header{background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;justify-content:space-between}
 .header h1{font-size:15px;font-weight:600}
+.header-right{display:flex;align-items:center;gap:12px}
 .tabs{display:flex;gap:2px}
-.tab{padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;border-radius:6px;color:var(--dim)}
+.tab{
+  padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;
+  border-radius:6px;color:var(--dim);transition:all .2s;user-select:none;
+}
 .tab:hover{background:var(--card);color:var(--text)}
 .tab.active{background:var(--accent);color:#fff}
+.tab:active{transform:scale(.95)}
 
-/* MAIN */
+/* Theme toggle */
+.theme-toggle{
+  width:44px;height:24px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;cursor:pointer;position:relative;transition:background .3s;
+}
+.theme-toggle::after{
+  content:'🌙';position:absolute;top:2px;left:2px;width:18px;height:18px;
+  background:var(--accent);border-radius:50%;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;justify-content:center;font-size:10px;
+}
+html[data-theme="light"] .theme-toggle::after{transform:translateX(20px);content:'☀️'}
+html[data-theme="light"] .theme-toggle{background:#e5e7eb;border-color:#d1d5db}
+
+/* ============ MAIN ============ */
 .main{padding:20px;overflow-y:auto}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
-.card h3{font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+
+/* Stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.stat{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px;text-align:center;
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.stat:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.3);border-color:var(--accent)}
 .stat .num{font-size:24px;font-weight:700;color:var(--accent)}
 .stat .lbl{font-size:11px;color:var(--dim);margin-top:4px}
 
-/* CHAT */
-.chat-box{height:300px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
-.msg{max-width:75%;padding:10px 14px;border-radius:12px;margin-bottom:6px;font-size:13px;line-height:1.5}
+/* Cards */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px;margin-bottom:16px;
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(99,102,241,.08);border-color:var(--accent)}
+.card h3{font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+
+/* ============ CHAT ============ */
+.chat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.chat-header h3{margin-bottom:0}
+.model-selector{
+  padding:6px 10px;background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:12px;outline:none;cursor:pointer;
+}
+.model-selector:focus{border-color:var(--accent)}
+.model-selector option{background:var(--card)}
+
+.chat-box{
+  height:320px;overflow-y:auto;background:var(--bg);
+  border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;
+  scroll-behavior:smooth;
+}
+.msg{
+  max-width:75%;padding:10px 14px;border-radius:12px;margin-bottom:8px;
+  font-size:13px;line-height:1.5;animation:msgIn .3s ease-out;
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .msg.me{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
 .msg.bot{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px}
-.input-row{display:flex;gap:8px}
-.input-row input{flex:1;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--text);font-size:13px;outline:none}
-.input-row input:focus{border-color:var(--accent)}
-.btn-go{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700}
+.msg.system{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--orange);font-size:12px;text-align:center;max-width:100%}
+.msg.error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--red);font-size:12px;max-width:100%}
 
-/* CONFIG */
+/* Typing indicator */
+.typing{display:flex;gap:4px;padding:12px 16px}
+.typing span{
+  width:7px;height:7px;background:var(--dim);border-radius:50%;
+  animation:bounce .6s infinite alternate;
+}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{to{opacity:.3;transform:translateY(-6px)}}
+
+.input-row{display:flex;gap:8px;align-items:center}
+.input-row input{
+  flex:1;padding:10px 14px;background:var(--card);border:1px solid var(--border);
+  border-radius:20px;color:var(--text);font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+.input-row input:focus{border-color:var(--accent)}
+.btn-go{
+  width:40px;height:40px;border-radius:50%;background:var(--accent);
+  color:#fff;border:none;cursor:pointer;font-weight:700;font-size:14px;
+  transition:transform .15s,box-shadow .2s,background .2s;flex-shrink:0;
+}
+.btn-go:hover{box-shadow:0 4px 16px var(--glow);background:var(--accent2)}
+.btn-go:active{transform:scale(.9)}
+
+/* ============ CONFIG ============ */
 .field{margin-bottom:12px}
-.field label{font-size:11px;color:var(--dim);display:block;margin-bottom:4px}
-.field input,.field select{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none}
+.field label{font-size:11px;color:var(--dim);display:block;margin-bottom:4px;white-space:nowrap}
+.field input,.field select{
+  width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;
+  transition:border-color .2s;
+}
 .field input:focus,.field select:focus{border-color:var(--accent)}
 select option{background:var(--card)}
-.agent-list .item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;margin-bottom:4px}
-.agent-list .item:hover{background:var(--card)}
+
+/* Agent list */
+.agent-list .item{
+  display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;margin-bottom:4px;
+  transition:background .2s,transform .15s;cursor:pointer;
+}
+.agent-list .item:hover{background:var(--card);transform:translateX(2px)}
+.agent-list .item:active{transform:scale(.98)}
 .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
 .badge-on{background:rgba(34,197,94,.15);color:var(--green)}
 .badge-off{background:var(--border);color:var(--dim)}
+
+/* ============ PINECONE / MEMORY ============ */
+.pinecone-section{margin-top:4px}
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-row input{
+  flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;
+}
+.search-row input:focus{border-color:var(--accent)}
+.search-row button{
+  padding:8px 16px;background:var(--accent);color:#fff;border:none;
+  border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;
+  transition:transform .15s,background .2s;
+}
+.search-row button:hover{background:var(--accent2)}
+.search-row button:active{transform:scale(.95)}
+
+.memory-results{max-height:200px;overflow-y:auto}
+.memory-item{
+  padding:10px 12px;background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;margin-bottom:6px;font-size:12px;line-height:1.5;
+  transition:border-color .2s;
+}
+.memory-item:hover{border-color:var(--accent)}
+.memory-item .score{color:var(--accent);font-weight:600;font-size:11px}
+.memory-item .text{color:var(--text);margin-top:4px}
+
+/* ============ LOADING SPINNER ============ */
+.spinner{
+  width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .6s linear infinite;display:inline-block;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ LIGHT THEME ============ */
+html[data-theme="light"]{
+  --bg:#f3f4f6;--surface:#fff;--card:#fff;--border:#e5e7eb;
+  --text:#1a1a2e;--dim:#6b7280;--glow:rgba(99,102,241,.1);
+}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="sidebar">
-<h2>Dashboard</h2>
-<div class="nav-item active">💬 Chat</div>
-<div class="nav-item">📋 Tasks</div>
-<div class="nav-item">🧠 Memory</div>
-<div class="nav-item">🔧 Skills</div>
-<div class="nav-item">📊 Analytics</div>
-<h2>Agents</h2>
-<div class="nav-item"><span class="dot on"></span>Research Scout</div>
-<div class="nav-item"><span class="dot on"></span>Code Builder</div>
-<div class="nav-item"><span class="dot off"></span>Deploy Agent</div>
-<div class="nav-item"><span class="dot on"></span>Memory Keeper</div>
-<div class="nav-item"><span class="dot off"></span>Web Scraper</div>
-<h2>Config</h2>
-<div class="field"><label>Provider</label><select><option selected>Groq</option><option>OpenRouter</option><option>Ollama</option></select></div>
-<div class="field"><label>Model</label><select><option>llama-3.1-8b-instant</option><option>llama-3.3-70b</option><option>qwen3-32b</option></select></div>
-<div class="field"><label>API Key</label><input type="password" value="gsk_****"></div>
-</div>
-<div class="header">
-<h1>AgentSwarp</h1>
-<div class="tabs">
-<div class="tab active">Chat</div>
-<div class="tab">Tasks</div>
-<div class="tab">Agents</div>
-<div class="tab">Settings</div>
-</div>
-</div>
-<div class="main">
-<div class="stats">
-<div class="stat"><div class="num">3</div><div class="lbl">Agents Online</div></div>
-<div class="stat"><div class="num">12</div><div class="lbl">Tasks Today</div></div>
-<div class="stat"><div class="num">48</div><div class="lbl">Memories</div></div>
-<div class="stat"><div class="num">99.9%</div><div class="lbl">Uptime</div></div>
-</div>
-<div class="card">
-<h3>💬 Chat</h3>
-<div class="chat-box" id="chat">
-<div class="msg bot">Agent: Ready. What should I build?</div>
-</div>
-<div class="input-row">
-<input id="msg" placeholder="Type a task or message..." onkeypress="if(event.key==='Enter')send()">
-<button class="btn-go" onclick="send()">Go</button>
-</div>
-</div>
-</div>
-</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">‹</button>
+
+    <h2 class="sidebar-label">Dashboard</h2>
+    <div class="nav-item active" data-section="chat" onclick="switchSection(this,'chat')">💬 <span class="sidebar-full">Chat</span></div>
+    <div class="nav-item" data-section="tasks" onclick="switchSection(this,'tasks')">📋 <span class="sidebar-full">Tasks</span></div>
+    <div class="nav-item" data-section="memory" onclick="switchSection(this,'memory')">🧠 <span class="sidebar-full">Memory</span></div>
+    <div class="nav-item" data-section="skills" onclick="switchSection(this,'skills')">🔧 <span class="sidebar-full">Skills</span></div>
+    <div class="nav-item" data-section="analytics" onclick="switchSection(this,'analytics')">📊 <span class="sidebar-full">Analytics</span></div>
+
+    <h2 class="sidebar-label">Agents</h2>
+    <div class="nav-item"><span class="dot on"></span><span class="sidebar-full">Research Scout</span></div>
+    <div class="nav-item"><span class="dot on"></span><span class="sidebar-full">Code Builder</span></div>
+    <div class="nav-item"><span class="dot off"></span><span class="sidebar-full">Deploy Agent</span></div>
+    <div class="nav-item"><span class="dot on"></span><span class="sidebar-full">Memory Keeper</span></div>
+    <div class="nav-item"><span class="dot off"></span><span class="sidebar-full">Web Scraper</span></div>
+
+    <h2 class="sidebar-label">Config</h2>
+    <div class="field">
+      <label>Provider</label>
+      <select id="provider" onchange="updateModels()">
+        <option value="groq" selected>Groq</option>
+        <option value="openrouter">OpenRouter</option>
+        <option value="ollama">Ollama</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Model</label>
+      <select id="model">
+        <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+        <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+        <option value="qwen-qwq-32b">qwen-qwq-32b</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="apiKey" value="gsk_****">
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>⚡ AgentSwarp</h1>
+    <div class="header-right">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'chat')">Chat</div>
+        <div class="tab" onclick="switchTab(this,'tasks')">Tasks</div>
+        <div class="tab" onclick="switchTab(this,'agents')">Agents</div>
+        <div class="tab" onclick="switchTab(this,'settings')">Settings</div>
+      </div>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="num">3</div><div class="lbl">Agents Online</div></div>
+      <div class="stat"><div class="num">12</div><div class="lbl">Tasks Today</div></div>
+      <div class="stat"><div class="num">48</div><div class="lbl">Memories</div></div>
+      <div class="stat"><div class="num">99.9%</div><div class="lbl">Uptime</div></div>
+    </div>
+
+    <!-- CHAT CARD -->
+    <div class="card" id="chatCard">
+      <div class="chat-header">
+        <h3>💬 Chat</h3>
+        <select class="model-selector" id="chatModel">
+          <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+          <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+          <option value="qwen-qwq-32b">qwen-qwq-32b</option>
+          <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+          <option value="gemma2-9b-it">gemma2-9b-it</option>
+        </select>
+      </div>
+      <div class="chat-box" id="chat">
+        <div class="msg bot">AgentSwarp initialized. Ready to build. 🚀</div>
+      </div>
+      <div class="input-row">
+        <input id="msg" placeholder="Type a task or message..." autocomplete="off">
+        <button class="btn-go" onclick="send()" title="Send">▸</button>
+      </div>
+    </div>
+
+    <!-- PINECONE / MEMORY CARD -->
+    <div class="card">
+      <h3>🧠 Vector Memory (Pinecone)</h3>
+      <div class="field">
+        <label>Pinecone API Key</label>
+        <input type="password" id="pineconeKey" placeholder="pcsk_...">
+      </div>
+      <div class="field">
+        <label>Index</label>
+        <input id="pineconeIndex" placeholder="agentswarm-memory" value="agentswarm-memory">
+      </div>
+      <div class="pinecone-section">
+        <div class="search-row">
+          <input id="memoryQuery" placeholder="Search memories semantically..." onkeypress="if(event.key==='Enter')searchMemory()">
+          <button onclick="searchMemory()"><span class="spinner" id="memSpinner" style="display:none"></span> Search</button>
+        </div>
+        <div class="memory-results" id="memoryResults">
+          <div class="memory-item"><span class="score">0.94</span><div class="text">User prefers dark theme and Mac-style UI design patterns.</div></div>
+          <div class="memory-item"><span class="score">0.87</span><div class="text">Project uses Groq API with llama-3.1-8b-instant as primary model.</div></div>
+          <div class="memory-item"><span class="score">0.81</span><div class="text">Deployed to Vercel at agentswarp-tan.vercel.app</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENTS CARD -->
+    <div class="card">
+      <h3>🤖 Active Agents</h3>
+      <div class="agent-list">
+        <div class="item"><span class="dot on"></span>Research Scout <span class="badge badge-on">online</span></div>
+        <div class="item"><span class="dot on"></span>Code Builder <span class="badge badge-on">online</span></div>
+        <div class="item"><span class="dot off"></span>Deploy Agent <span class="badge badge-off">offline</span></div>
+        <div class="item"><span class="dot on"></span>Memory Keeper <span class="badge badge-on">online</span></div>
+        <div class="item"><span class="dot off"></span>Web Scraper <span class="badge badge-off">offline</span></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
 <script>
-var themes={dark:{bg:'#0a0a0f',surface:'#111118',card:'#16161f',border:'#222230',text:'#e8e8ed',dim:'#6b7280',accent:'#6366f1'},light:{bg:'#f8f9fa',surface:'#fff',card:'#fff',border:'#e5e7eb',text:'#1a1a2e',dim:'#6b7280',accent:'#6366f1'}};
-function send(){var m=document.getElementById('msg');if(!m.value)return;var c=document.getElementById('chat');
-c.innerHTML+='<div class=\"msg me\">'+m.value+'</div>';c.scrollTop=c.scrollHeight;
-var goal=m.value;m.value='';
-fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:goal})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class=\"msg bot\">Agent: Task '+d.id.slice(0,8)+' created, working...</div>';c.scrollTop=c.scrollHeight;}).catch(e=>c.innerHTML+='<div class=\"msg bot\">Error</div>');}
+// ========== SIDEBAR ==========
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function switchSection(el, section) {
+  document.querySelectorAll('.nav-item[data-section]').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  // Map sections to main content
+  const cards = document.querySelectorAll('.main .card');
+  if (section === 'chat') {
+    cards.forEach((c,i) => c.style.display = i === 0 ? '' : (i < 3 ? '' : 'none'));
+  } else if (section === 'memory') {
+    cards.forEach((c,i) => c.style.display = i === 1 ? '' : 'none');
+  } else if (section === 'skills' || section === 'analytics') {
+    cards.forEach(c => c.style.display = '');
+  }
+}
+
+// ========== TABS ==========
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ========== THEME ==========
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+
+// ========== MODEL CONFIG ==========
+const modelMap = {
+  groq: ['llama-3.1-8b-instant','llama-3.3-70b-versatile','qwen-qwq-32b','mixtral-8x7b-32768','gemma2-9b-it'],
+  openrouter: ['anthropic/claude-3.5-sonnet','openai/gpt-4o','google/gemini-pro-1.5','meta-llama/llama-3.1-70b-instruct'],
+  ollama: ['llama3.1:8b','llama3.1:70b','codellama:13b','mistral:7b']
+};
+
+function updateModels() {
+  const provider = document.getElementById('provider').value;
+  const modelEl = document.getElementById('model');
+  const chatModelEl = document.getElementById('chatModel');
+  const models = modelMap[provider] || [];
+
+  [modelEl, chatModelEl].forEach(sel => {
+    sel.innerHTML = '';
+    models.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m; opt.textContent = m;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+// Sync chat model selector with sidebar model
+document.getElementById('chatModel').addEventListener('change', function() {
+  document.getElementById('model').value = this.value;
+});
+document.getElementById('model').addEventListener('change', function() {
+  document.getElementById('chatModel').value = this.value;
+});
+
+// ========== CHAT ==========
+function send() {
+  const m = document.getElementById('msg');
+  const text = m.value.trim();
+  if (!text) return;
+
+  const c = document.getElementById('chat');
+
+  // User message
+  c.innerHTML += '<div class="msg me">' + escHtml(text) + '</div>';
+  c.scrollTop = c.scrollHeight;
+  m.value = '';
+
+  // Typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'msg bot';
+  typing.id = 'typing';
+  typing.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  c.appendChild(typing);
+  c.scrollTop = c.scrollHeight;
+
+  const model = document.getElementById('chatModel').value;
+  const provider = document.getElementById('provider').value;
+
+  fetch('/api/tasks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ goal: text, model: model, provider: provider })
+  })
+  .then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(d => {
+    removeTyping();
+    const response = d.result || d.response || d.message || ('Task ' + (d.id || '').slice(0, 8) + ' created, working...');
+    c.innerHTML += '<div class="msg bot">' + escHtml(response) + '</div>';
+    c.scrollTop = c.scrollHeight;
+  })
+  .catch(e => {
+    removeTyping();
+    c.innerHTML += '<div class="msg error">⚠ ' + escHtml(e.message) + '</div>';
+    c.scrollTop = c.scrollHeight;
+  });
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Enter key
+document.getElementById('msg').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') send();
+});
+
+// ========== PINECONE SEARCH ==========
+function searchMemory() {
+  const query = document.getElementById('memoryQuery').value.trim();
+  if (!query) return;
+
+  const spinner = document.getElementById('memSpinner');
+  const results = document.getElementById('memoryResults');
+  spinner.style.display = 'inline-block';
+
+  const apiKey = document.getElementById('pineconeKey').value;
+  const index = document.getElementById('pineconeIndex').value || 'agentswarm-memory';
+
+  // Try API call if key is set, otherwise simulate
+  if (apiKey && apiKey.startsWith('pcsk_')) {
+    fetch('/api/pinecone/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query, apiKey: apiKey, index: index })
+    })
+    .then(r => r.json())
+    .then(data => {
+      spinner.style.display = 'none';
+      if (data.matches && data.matches.length) {
+        results.innerHTML = data.matches.map(m =>
+          '<div class="memory-item"><span class="score">' +
+          (m.score * 100).toFixed(0) + '%</span><div class="text">' +
+          escHtml(m.metadata?.text || JSON.stringify(m.metadata)) + '</div></div>'
+        ).join('');
+      } else {
+        results.innerHTML = '<div class="memory-item"><div class="text">No results found.</div></div>';
+      }
+    })
+    .catch(e => {
+      spinner.style.display = 'none';
+      results.innerHTML = '<div class="memory-item"><div class="text" style="color:var(--red)">Error: ' + escHtml(e.message) + '</div></div>';
+    });
+  } else {
+    // Demo mode
+    setTimeout(() => {
+      spinner.style.display = 'none';
+      const demos = [
+        { score: 0.92, text: 'Result for "' + query + '": Related memory entry found in vector store.' },
+        { score: 0.78, text: 'Similar context: Previous conversation about ' + query.split(' ').slice(0, 3).join(' ') + '...' },
+        { score: 0.65, text: 'Weak match: Configuration note mentioning ' + query.split(' ').pop() }
+      ];
+      results.innerHTML = demos.map(m =>
+        '<div class="memory-item"><span class="score">' +
+        (m.score * 100).toFixed(0) + '%</span><div class="text">' + escHtml(m.text) + '</div></div>'
+      ).join('');
+    }, 800);
+  }
+}
 </script>
 </body>
 </html>
