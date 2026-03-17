@@ -1,107 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="system">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgentSwarp</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--accent:#58a6ff;--green:#3fb950}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fff;--card:#f5f5f7;--card2:#fff;--border:#e5e5e5;--text:#1d1d1f;--dim:#86868b;--accent:#0071e3;--green:#34c759;--input:#fff;--chat:#f5f5f7}
-[data-theme="dark"]{--bg:#0a0a0a;--card:#141414;--card2:#1a1a1a;--border:#222;--text:#e0e0e0;--dim:#666;--accent:#0071e3;--green:#34c759;--input:#141414;--chat:#111}
-body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh}
-nav{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
-.logo{font-weight:700;font-size:1.1em;letter-spacing:-.5px}
-.nav-right{display:flex;gap:8px;align-items:center}
-.theme-btn{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;color:var(--text);transition:all .2s}
-.theme-btn:hover{border-color:var(--accent)}
-.theme-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:600}
-.wrap{max-width:1100px;margin:0 auto;padding:20px 24px;display:grid;grid-template-columns:1fr 300px;gap:20px}
-@media(max-width:860px){.wrap{grid-template-columns:1fr}.side{display:none}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
-.card h3{font-size:.75em;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
-.val{font-size:1.8em;font-weight:700;letter-spacing:-1px}
-label{font-size:.72em;font-weight:500;color:var(--dim);display:block;margin-bottom:4px}
-input,select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;outline:none;background:var(--input);color:var(--text);font-family:inherit;transition:border .2s}
+body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+.top{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;font-size:18px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 280px;gap:16px}
+@media(max-width:800px){.wrap{grid-template-columns:1fr}.side{display:none}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+.card h3{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+input,select,textarea{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit}
 input:focus,select:focus{border-color:var(--accent)}
-.btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.btn{background:var(--accent);color:#000;border:none;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer;width:100%}
 .btn:hover{filter:brightness(1.1)}
-.btn:active{transform:scale(.97)}
-.chat{height:340px;overflow-y:auto;padding:14px;background:var(--chat);border-radius:14px;margin-bottom:10px}
-.msg{max-width:78%;margin-bottom:6px;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.45}
-.msg.me{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
-.msg.bot{background:var(--card2);border:1px solid var(--border);border-bottom-left-radius:4px}
-.row{display:flex;gap:8px}
-.input{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;background:var(--input);color:var(--text)}
-.input:focus{border-color:var(--accent)}
-.btn-send{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:16px}
-.item{padding:10px;border-radius:10px;font-size:13px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:space-between}
+.chat{height:320px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
+.msg{padding:8px 12px;border-radius:8px;margin-bottom:6px;max-width:80%;font-size:13px;line-height:1.4}
+.msg.a{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:2px}
+.msg.u{background:#1f6feb;color:#fff;margin-left:auto;border-bottom-right-radius:2px}
+.row{display:flex;gap:6px}
+.input{flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:20px;color:var(--text);font-size:13px;outline:none}
+.send{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#000;border:none;cursor:pointer;font-weight:700}
+.item{padding:8px 10px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px}
 .item:hover{background:var(--card)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
-.dot.idle{background:var(--dim)}
-select option{background:var(--card);color:var(--text)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+label{font-size:11px;color:var(--dim);display:block;margin-bottom:4px}
+select option{background:var(--card)}
 </style>
 </head>
 <body>
-<nav>
-<div class="logo">AgentSwarp</div>
-<div class="nav-right">
-<span class="badge">● Online</span>
-<button class="theme-btn active" onclick="setTheme('light')">Light</button>
-<button class="theme-btn" onclick="setTheme('dark')">Dark</button>
-<button class="theme-btn" onclick="setTheme('system')">System</button>
-</div>
-</nav>
+<div class="top"><div class="logo">AgentSwarp</div><span style="color:var(--green);font-size:12px">● Online</span></div>
 <div class="wrap">
 <div>
-<div class="chat" id="chat"><div class="msg bot"><b>Agent</b><br>Ready. What should I build?</div></div>
-<div class="row"><input class="input" id="msg" placeholder="Type a goal..." onkeypress="if(event.key==='Enter')send()"><button class="btn-send" onclick="send()">→</button></div>
-<div class="card"><h3>Tasks</h3>
-<div class="item"><span class="dot"></span>Research AI trends</div>
-<div class="item"><span class="dot"></span>Build landing page</div>
-<div class="item"><span class="dot idle"></span>Deploy to GitHub <span class="badge">done</span></div>
+<div class="chat" id="chat"><div class="msg a"><b style="color:var(--accent)">Agent</b><br>Ready. What should I work on?</div></div>
+<div class="row"><input class="input" id="msg" placeholder="Describe a task or goal..." onkeypress="if(event.key=='Enter')send()"><button class="send" onclick="send()">Go</button></div>
+<div class="card"><h3>Recent Tasks</h3>
+<div class="item"><span class="dot"></span>Research latest AI agent frameworks</div>
+<div class="item"><span class="dot"></span>Build a Chrome extension for LinkedIn</div>
+<div class="item"><span class="dot"></span>Deploy landing page to Vercel</div>
 </div>
 </div>
 <div class="side">
 <div class="card"><h3>Model</h3>
 <label>Provider</label>
-<select><option>OpenRouter</option><option>Groq</option><option>Ollama</option></select>
-<label>Model ID</label>
-<input value="openrouter/healer-alpha">
-<label>API Key</label>
-<input type="password" value="sk-...">
+<select><option>Groq</option><option>OpenRouter</option><option>Ollama</option></select>
+<label>Model</label>
+<select>
+<option>llama-3.1-8b-instant</option>
+<option>llama-3.3-70b-versatile</option>
+<option>qwen/qwen3-32b</option>
+</select>
 </div>
-<div class="card"><h3>Skills</h3>
-<div class="item">🔍 Web Search <span class="dot"></span></div>
-<div class="item">💻 Shell Exec <span class="dot"></span></div>
-<div class="item">📁 Files <span class="dot"></span></div>
-<div class="item">🐙 GitHub <span class="dot"></span></div>
-<div class="item">🌐 Browser <span class="dot"></span></div>
+<div class="card"><h3>Agents</h3>
+<div class="item"><span class="dot"></span>Research Agent</div>
+<div class="item"><span class="dot"></span>Code Builder</div>
+<div class="item"><span class="dot"></span>Deploy Agent</div>
+<div class="item"><span class="dot"></span>Memory Keeper</div>
 </div>
-<div class="card"><h3>Memory</h3>
-<div class="item">Short-term ✅</div>
-<div class="item">SQLite ✅</div>
-<div class="item">Pinecone 🔧</div>
+<div class="card"><h3>Config</h3>
+<label>Max tasks/hr</label>
+<input value="99999">
+<label>Allowed</label>
+<input value="*">
 </div>
 </div>
 </div>
 <script>
-function setTheme(t){
-document.documentElement.setAttribute('data-theme',t);
-document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
-event.target.classList.add('active');
-localStorage.setItem('theme',t);
-}
-var saved=localStorage.getItem('theme');
-if(saved){document.documentElement.setAttribute('data-theme',saved);}
-function send(){var m=document.getElementById('msg').value;if(!m)return;
-var c=document.getElementById('chat');
-c.innerHTML+=<div class="msg me">'+m+'</div>';
-document.getElementById('msg').value='';
-c.scrollTop=c.scrollHeight;
-fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:m})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class="msg bot"><b>Agent</b><br>Task '+d.id.slice(0,8)+' added</div>';c.scrollTop=c.scrollHeight;}).catch(e=>{c.innerHTML+='<div class="msg bot">Error</div>';});
-}
+function send(){var m=document.getElementById('msg').value;if(!m)return;var c=document.getElementById('chat');
+c.innerHTML+='<div class="msg u">'+m+'</div>';document.getElementById('msg').value='';
+fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:m})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class="msg a"><b style="color:var(--accent)">Agent</b><br>Task '+d.id.slice(0,8)+' created</div>';}).catch(e=>{c.innerHTML+='<div class="msg a">Error: '+e.message+'</div>';});}
 </script>
 </body>
 </html>
