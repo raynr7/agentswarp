@@ -1,78 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgentSwarp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--accent:#58a6ff;--green:#3fb950}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text)}
-.top{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:700;font-size:18px}
-.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 280px;gap:16px}
-@media(max-width:800px){.wrap{grid-template-columns:1fr}.side{display:none}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
-.card h3{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-input,select,textarea{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit}
-input:focus,select:focus{border-color:var(--accent)}
-.btn{background:var(--accent);color:#000;border:none;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer;width:100%}
-.btn:hover{filter:brightness(1.1)}
-.chat{height:320px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
-.msg{padding:8px 12px;border-radius:8px;margin-bottom:6px;max-width:80%;font-size:13px;line-height:1.4}
-.msg.a{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:2px}
-.msg.u{background:#1f6feb;color:#fff;margin-left:auto;border-bottom-right-radius:2px}
-.row{display:flex;gap:6px}
-.input{flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:20px;color:var(--text);font-size:13px;outline:none}
-.send{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#000;border:none;cursor:pointer;font-weight:700}
-.item{padding:8px 10px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px}
-.item:hover{background:var(--card)}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
-label{font-size:11px;color:var(--dim);display:block;margin-bottom:4px}
+:root{--bg:#0a0a0f;--surface:#111118;--card:#16161f;--border:#222230;--text:#e8e8ed;--dim:#6b7280;--accent:#6366f1;--accent2:#8b5cf6;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--glow:rgba(99,102,241,.15)}
+*{transition:background .2s,border-color .2s}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:56px 1fr;height:100vh}
+@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{display:none}}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px;overflow-y:auto}
+.sidebar h2{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px}
+.sidebar h2:first-child{margin-top:0}
+.nav-item{padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.nav-item:hover{background:var(--card)}
+.nav-item.active{background:var(--accent);color:#fff}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot.on{background:var(--green)}
+.dot.off{background:var(--dim)}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;justify-content:space-between}
+.header h1{font-size:15px;font-weight:600}
+.tabs{display:flex;gap:2px}
+.tab{padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;border-radius:6px;color:var(--dim)}
+.tab:hover{background:var(--card);color:var(--text)}
+.tab.active{background:var(--accent);color:#fff}
+
+/* MAIN */
+.main{padding:20px;overflow-y:auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.card h3{font-size:12px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.stat .num{font-size:24px;font-weight:700;color:var(--accent)}
+.stat .lbl{font-size:11px;color:var(--dim);margin-top:4px}
+
+/* CHAT */
+.chat-box{height:300px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
+.msg{max-width:75%;padding:10px 14px;border-radius:12px;margin-bottom:6px;font-size:13px;line-height:1.5}
+.msg.me{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.msg.bot{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px}
+.input-row{display:flex;gap:8px}
+.input-row input{flex:1;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--text);font-size:13px;outline:none}
+.input-row input:focus{border-color:var(--accent)}
+.btn-go{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700}
+
+/* CONFIG */
+.field{margin-bottom:12px}
+.field label{font-size:11px;color:var(--dim);display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
 select option{background:var(--card)}
+.agent-list .item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;margin-bottom:4px}
+.agent-list .item:hover{background:var(--card)}
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.badge-on{background:rgba(34,197,94,.15);color:var(--green)}
+.badge-off{background:var(--border);color:var(--dim)}
 </style>
 </head>
 <body>
-<div class="top"><div class="logo">AgentSwarp</div><span style="color:var(--green);font-size:12px">● Online</span></div>
-<div class="wrap">
-<div>
-<div class="chat" id="chat"><div class="msg a"><b style="color:var(--accent)">Agent</b><br>Ready. What should I work on?</div></div>
-<div class="row"><input class="input" id="msg" placeholder="Describe a task or goal..." onkeypress="if(event.key=='Enter')send()"><button class="send" onclick="send()">Go</button></div>
-<div class="card"><h3>Recent Tasks</h3>
-<div class="item"><span class="dot"></span>Research latest AI agent frameworks</div>
-<div class="item"><span class="dot"></span>Build a Chrome extension for LinkedIn</div>
-<div class="item"><span class="dot"></span>Deploy landing page to Vercel</div>
+<div class="app">
+<div class="sidebar">
+<h2>Dashboard</h2>
+<div class="nav-item active">💬 Chat</div>
+<div class="nav-item">📋 Tasks</div>
+<div class="nav-item">🧠 Memory</div>
+<div class="nav-item">🔧 Skills</div>
+<div class="nav-item">📊 Analytics</div>
+<h2>Agents</h2>
+<div class="nav-item"><span class="dot on"></span>Research Scout</div>
+<div class="nav-item"><span class="dot on"></span>Code Builder</div>
+<div class="nav-item"><span class="dot off"></span>Deploy Agent</div>
+<div class="nav-item"><span class="dot on"></span>Memory Keeper</div>
+<div class="nav-item"><span class="dot off"></span>Web Scraper</div>
+<h2>Config</h2>
+<div class="field"><label>Provider</label><select><option selected>Groq</option><option>OpenRouter</option><option>Ollama</option></select></div>
+<div class="field"><label>Model</label><select><option>llama-3.1-8b-instant</option><option>llama-3.3-70b</option><option>qwen3-32b</option></select></div>
+<div class="field"><label>API Key</label><input type="password" value="gsk_****"></div>
+</div>
+<div class="header">
+<h1>AgentSwarp</h1>
+<div class="tabs">
+<div class="tab active">Chat</div>
+<div class="tab">Tasks</div>
+<div class="tab">Agents</div>
+<div class="tab">Settings</div>
 </div>
 </div>
-<div class="side">
-<div class="card"><h3>Model</h3>
-<label>Provider</label>
-<select><option>Groq</option><option>OpenRouter</option><option>Ollama</option></select>
-<label>Model</label>
-<select>
-<option>llama-3.1-8b-instant</option>
-<option>llama-3.3-70b-versatile</option>
-<option>qwen/qwen3-32b</option>
-</select>
+<div class="main">
+<div class="stats">
+<div class="stat"><div class="num">3</div><div class="lbl">Agents Online</div></div>
+<div class="stat"><div class="num">12</div><div class="lbl">Tasks Today</div></div>
+<div class="stat"><div class="num">48</div><div class="lbl">Memories</div></div>
+<div class="stat"><div class="num">99.9%</div><div class="lbl">Uptime</div></div>
 </div>
-<div class="card"><h3>Agents</h3>
-<div class="item"><span class="dot"></span>Research Agent</div>
-<div class="item"><span class="dot"></span>Code Builder</div>
-<div class="item"><span class="dot"></span>Deploy Agent</div>
-<div class="item"><span class="dot"></span>Memory Keeper</div>
+<div class="card">
+<h3>💬 Chat</h3>
+<div class="chat-box" id="chat">
+<div class="msg bot">Agent: Ready. What should I build?</div>
 </div>
-<div class="card"><h3>Config</h3>
-<label>Max tasks/hr</label>
-<input value="99999">
-<label>Allowed</label>
-<input value="*">
+<div class="input-row">
+<input id="msg" placeholder="Type a task or message..." onkeypress="if(event.key==='Enter')send()">
+<button class="btn-go" onclick="send()">Go</button>
+</div>
 </div>
 </div>
 </div>
 <script>
-function send(){var m=document.getElementById('msg').value;if(!m)return;var c=document.getElementById('chat');
-c.innerHTML+='<div class="msg u">'+m+'</div>';document.getElementById('msg').value='';
-fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:m})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class="msg a"><b style="color:var(--accent)">Agent</b><br>Task '+d.id.slice(0,8)+' created</div>';}).catch(e=>{c.innerHTML+='<div class="msg a">Error: '+e.message+'</div>';});}
+var themes={dark:{bg:'#0a0a0f',surface:'#111118',card:'#16161f',border:'#222230',text:'#e8e8ed',dim:'#6b7280',accent:'#6366f1'},light:{bg:'#f8f9fa',surface:'#fff',card:'#fff',border:'#e5e7eb',text:'#1a1a2e',dim:'#6b7280',accent:'#6366f1'}};
+function send(){var m=document.getElementById('msg');if(!m.value)return;var c=document.getElementById('chat');
+c.innerHTML+='<div class=\"msg me\">'+m.value+'</div>';c.scrollTop=c.scrollHeight;
+var goal=m.value;m.value='';
+fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:goal})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class=\"msg bot\">Agent: Task '+d.id.slice(0,8)+' created, working...</div>';c.scrollTop=c.scrollHeight;}).catch(e=>c.innerHTML+='<div class=\"msg bot\">Error</div>');}
 </script>
 </body>
 </html>
