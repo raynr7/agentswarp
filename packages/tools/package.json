@@ -1,0 +1,11 @@
+{
+  "name": "@agentswarm/tools",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo 'tools ready'",
+    "build": "echo 'tools built'"
+  },
+  "dependencies": {
+    "zod": "^3.23.0"
+  }
+}

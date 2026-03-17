@@ -1,0 +1,14 @@
+{
+  "name": "@agentswarm/web",
+  "version": "0.2.0",
+  "scripts": {
+    "dev": "vite dev --port 5173",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sveltejs/kit": "^2.5.0",
+    "svelte": "^5.46.4",
+    "tailwindcss": "^3.4.0"
+  }
+}

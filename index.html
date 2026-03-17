@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentSwarp - Your AI Workforce</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --bg3: #1a1a25;
+            --accent: #6c5ce7;
+            --accent2: #a29bfe;
+            --cyan: #00cec9;
+            --pink: #fd79a8;
+            --orange: #fdcb6e;
+            --green: #00b894;
+            --red: #e17055;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+            --border: #2d2d3a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(108, 92, 231, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(108, 92, 231, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glow-orb.purple { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
+        .glow-orb.cyan { width: 500px; height: 500px; background: var(--cyan); bottom: -150px; right: -150px; }
+        .glow-orb.pink { width: 400px; height: 400px; background: var(--pink); top: 50%; left: 60%; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-weight: 800; font-size: 1.3rem;
+        }
+        .logo span { color: var(--accent2); }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(108, 92, 231, 0.15);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent2);
+            margin-bottom: 1.5rem;
+        }
+        .badge .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent2) 50%, var(--cyan) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero .subtitle {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--text2);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex; gap: 2rem;
+            padding: 1rem 2rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+        .stat { text-align: center; }
+        .stat .num { font-size: 1.5rem; font-weight: 800; color: var(--accent2); }
+        .stat .label { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; }
+        .stat-divider { width: 1px; background: var(--border); }
+
+        /* CTA */
+        .cta-group { display: flex; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(108, 92, 231, 0.6); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover { border-color: var(--accent); background: rgba(108, 92, 231, 0.1); }
+
+        /* Agents Grid */
+        .agents-section {
+            position: relative; z-index: 1;
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 {
+            font-size: 2.5rem; font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .section-header p { color: var(--text2); font-size: 1.1rem; }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .agent-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .agent-card:hover { transform: translateY(-4px); border-color: rgba(108, 92, 231, 0.4); }
+        .agent-card:hover::before { opacity: 1; }
+
+        .agent-card.research::before { background: var(--cyan); }
+        .agent-card.content::before { background: var(--orange); }
+        .agent-card.design::before { background: var(--pink); }
+        .agent-card.data::before { background: var(--green); }
+        .agent-card.deploy::before { background: var(--accent2); }
+
+        .agent-icon {
+            width: 56px; height: 56px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+        }
+        .agent-card.research .agent-icon { background: rgba(0, 206, 201, 0.15); }
+        .agent-card.content .agent-icon { background: rgba(253, 203, 110, 0.15); }
+        .agent-card.design .agent-icon { background: rgba(253, 121, 168, 0.15); }
+        .agent-card.data .agent-icon { background: rgba(0, 184, 148, 0.15); }
+        .agent-card.deploy .agent-icon { background: rgba(162, 155, 254, 0.15); }
+
+        .agent-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .agent-card p { color: var(--text2); font-size: 0.9rem; line-height: 1.5; }
+        .agent-tag {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .agent-card.research .agent-tag { background: rgba(0, 206, 201, 0.15); color: var(--cyan); }
+        .agent-card.content .agent-tag { background: rgba(253, 203, 110, 0.15); color: var(--orange); }
+        .agent-card.design .agent-tag { background: rgba(253, 121, 168, 0.15); color: var(--pink); }
+        .agent-card.data .agent-tag { background: rgba(0, 184, 148, 0.15); color: var(--green); }
+        .agent-card.deploy .agent-tag { background: rgba(162, 155, 254, 0.15); color: var(--accent2); }
+
+        /* How it works */
+        .how-section {
+            position: relative; z-index: 1;
+            padding: 6rem 2rem;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .how-step { text-align: center; }
+        .step-num {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: rgba(108, 92, 231, 0.15);
+            border: 2px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+            margin: 0 auto 1rem;
+            color: var(--accent2);
+        }
+        .how-step h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .how-step p { color: var(--text2); font-size: 0.85rem; }
+
+        /* Coming Soon / Signup */
+        .signup-section {
+            position: relative; z-index: 1;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        .signup-box {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+        .coming-soon {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+        .signup-box h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .signup-box p { color: var(--text2); margin-bottom: 2rem; }
+        .email-form { display: flex; gap: 0.5rem; }
+        .email-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .email-form input:focus { border-color: var(--accent); }
+        .email-form button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .email-form button:hover { background: #5b4bd5; }
+
+        /* Footer */
+        footer {
+            position: relative; z-index: 1;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text2);
+            font-size: 0.85rem;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 4px; height: 4px;
+            background: var(--accent2);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 0;
+            pointer-events: none;
+            animation: float-up 8s infinite;
+        }
+        @keyframes float-up {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.1; }
+            100% { opacity: 0; transform: translateY(-100px) scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar { flex-direction: column; gap: 1rem; }
+            .stat-divider { width: 100%; height: 1px; }
+            .nav-links { display: none; }
+            .email-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="glow-orb purple"></div>
+    <div class="glow-orb cyan"></div>
+    <div class="glow-orb pink"></div>
+
+    <!-- Particles -->
+    <script>
+        for(let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = (6 + Math.random() * 6) + 's';
+            document.body.appendChild(p);
+        }
+    </script>
+
+    <nav>
+        <div class="logo">🐝 Agent<span>Swarp</span></div>
+        <div class="nav-links">
+            <a href="#agents">Agents</a>
+            <a href="#how">How It Works</a>
+            <a href="demo.html">Demo</a>
+            <a href="#signup">Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="badge">
+            <span class="dot"></span>
+            Coming Q2 2026
+        </div>
+        <h1>Your AI Workforce<br>Is Here</h1>
+        <p class="subtitle">Multiple AI agents working together. No code required.</p>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="num">5</div>
+                <div class="label">Agent Types</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="num">∞</div>
+                <div class="label">Parallel Tasks</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="num">0</div>
+                <div class="label">Code Required</div>
+            </div>
+        </div>
+
+        <div class="cta-group">
+            <a href="#signup" class="btn btn-primary">Get Early Access</a>
+            <a href="demo.html" class="btn btn-ghost">Try the Demo →</a>
+        </div>
+    </section>
+
+    <!-- Agents -->
+    <section class="agents-section" id="agents">
+        <div class="section-header">
+            <h2>Meet Your Agents</h2>
+            <p>Five specialized AI agents, working in parallel to get things done.</p>
+        </div>
+        <div class="agents-grid">
+            <div class="agent-card research">
+                <div class="agent-icon">🔍</div>
+                <h3>Research Agent</h3>
+                <p>Scans the web, reads papers, extracts key insights. Finds what you need before you finish your coffee.</p>
+                <span class="agent-tag">Web Search · Summarize · Analyze</span>
+            </div>
+            <div class="agent-card content">
+                <div class="agent-icon">✍️</div>
+                <h3>Content Agent</h3>
+                <p>Writes blog posts, social copy, emails, docs. Adapts tone and format to your brand voice automatically.</p>
+                <span class="agent-tag">Write · Edit · Repurpose</span>
+            </div>
+            <div class="agent-card design">
+                <div class="agent-icon">🎨</div>
+                <h3>Design Agent</h3>
+                <p>Generates layouts, graphics, and visual assets. From wireframes to polished mockups in seconds.</p>
+                <span class="agent-tag">Layout · Visual · Brand</span>
+            </div>
+            <div class="agent-card data">
+                <div class="agent-icon">📊</div>
+                <h3>Data Agent</h3>
+                <p>Crunches numbers, builds dashboards, finds patterns. Transforms raw data into actionable insights.</p>
+                <span class="agent-tag">Analyze · Visualize · Report</span>
+            </div>
+            <div class="agent-card deploy">
+                <div class="agent-icon">🚀</div>
+                <h3>Deploy Agent</h3>
+                <p>Takes your work live. Deploys sites, pushes updates, manages infrastructure. Ship without DevOps.</p>
+                <span class="agent-tag">Deploy · Monitor · Scale</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Three steps. That's it.</p>
+        </div>
+        <div class="how-grid">
+            <div class="how-step">
+                <div class="step-num">1</div>
+                <h3>Describe Your Task</h3>
+                <p>Tell the swarm what you need in plain English. No prompts, no configs.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-num">2</div>
+                <h3>Agents Collaborate</h3>
+                <p>The right agents activate, share context, and work in parallel.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-num">3</div>
+                <h3>Get Results</h3>
+                <p>Receive polished output. Iterate with natural language feedback.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup -->
+    <section class="signup-section" id="signup">
+        <div class="signup-box">
+            <span class="coming-soon">Coming Soon</span>
+            <h2>Be First in Line</h2>
+            <p>Join the waitlist and get early access when we launch.</p>
+            <form class="email-form" onsubmit="handleSignup(event)">
+                <input type="email" id="email-input" placeholder="you@example.com" required>
+                <button type="submit">Join Waitlist</button>
+            </form>
+            <p id="signup-msg" style="margin-top: 1rem; font-size: 0.85rem; color: var(--green); display: none;">🐝 You're on the list! We'll be in touch.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 AgentSwarp. Built with 🐝 and ambition.</p>
+    </footer>
+
+    <script>
+        function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('email-input').value;
+            document.getElementById('signup-msg').style.display = 'block';
+            document.getElementById('email-input').value = '';
+            console.log('Waitlist signup:', email);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

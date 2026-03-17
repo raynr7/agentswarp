@@ -1,0 +1,18 @@
+{
+  "name": "agentswarp",
+  "version": "2.0.0",
+  "description": "Lightweight AI agent platform - runs on 1GB RAM",
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "dev": "bun run --watch src/main.ts",
+    "build": "bun build src/main.ts --outdir ./dist --target bun"
+  },
+  "dependencies": {
+    "hono": "^4.0.0",
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "bun-types": "latest"
+  }
+}

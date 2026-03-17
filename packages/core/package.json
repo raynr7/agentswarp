@@ -1,0 +1,14 @@
+{
+  "name": "@agentswarm/core",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo 'core ready'",
+    "build": "echo 'core built'"
+  },
+  "dependencies": {
+    "openai": "^4.52.0",
+    "zod": "^3.23.0",
+    "nanoid": "^5.0.7",
+    "node-cron": "^3.0.3"
+  }
+}

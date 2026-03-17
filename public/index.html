@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentSwarp</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#12121a;--border:#1e1e2e;--text:#e0e0e0;--dim:#888;--accent:#6c5ce7;--green:#00e676;--red:#ff5252}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.5em;font-weight:700;background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.main{max-width:1200px;margin:0 auto;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.card h3{font-size:.9em;color:var(--dim);margin-bottom:8px}
+.card .value{font-size:1.8em;font-weight:700;color:var(--text)}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;transition:background .2s}
+.btn:hover{filter:brightness(1.1)}
+.input{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);width:100%;font-size:14px;outline:none}
+.input:focus{border-color:var(--accent)}
+.agent{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+.agent .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:slideIn .3s ease}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">AgentSwarp</div>
+<div style="color:var(--dim)">Lightweight AI Agent Platform</div>
+</div>
+<div class="main">
+<div class="grid">
+<div class="card"><h3>Agents Online</h3><div class="value">3</div></div>
+<div class="card"><h3>Tasks Today</h3><div class="value">12</div></div>
+<div class="card"><h3>Memory Items</h3><div class="value">48</div></div>
+<div class="card"><h3>Uptime</h3><div class="value" id="uptime">--</div></div>
+</div>
+<div class="card" style="margin-bottom:16px">
+<h3>Give me a goal</h3>
+<div style="display:flex;gap:8px;margin-top:8px">
+<input class="input" id="goal" placeholder="Research latest AI trends and summarize...">
+<button class="btn" onclick="addTask()">Execute</button>
+</div>
+</div>
+<div class="card">
+<h3>Active Agents</h3>
+<div class="agent"><div class="dot"></div><span>Research Agent</span></div>
+<div class="agent"><div class="dot"></div><span>Code Agent</span></div>
+<div class="agent"><div class="dot" style="background:var(--accent)"></div><span>Deploy Agent</span></div>
+</div>
+</div>
+<script>
+async function addTask(){
+const g=document.getElementById('goal').value;if(!g)return;
+await fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:g})});
+document.getElementById('goal').value='';alert('Task added!');}
+fetch('/api/status').then(r=>r.json()).then(d=>{document.getElementById('uptime').textContent=Math.floor(d.uptime/60)+' min'});
+</script>
+</body>
+</html>
