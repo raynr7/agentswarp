@@ -1,104 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgentSwarp</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#1d1d1f;min-height:100vh}
-nav{background:rgba(251,251,253,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid #e0e0e0;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-size:1.1em;font-weight:700;letter-spacing:-0.5px}
-.badge{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500}
-.container{max-width:1100px;margin:0 auto;padding:24px 32px;display:grid;grid-template-columns:1fr 320px;gap:24px}
-@media(max-width:860px){.container{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:20px 24px;margin-bottom:16px}
-.card h3{font-size:.8em;font-weight:600;color:#86868b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-.card .val{font-size:2em;font-weight:700;letter-spacing:-1px}
-label{font-size:.75em;font-weight:500;color:#86868b;display:block;margin-bottom:4px}
-input,select{width:100%;padding:10px 14px;border:1px solid #d2d2d7;border-radius:10px;font-size:14px;outline:none;font-family:inherit;background:#fff}
-input:focus,select:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,0.15)}
-.btn{background:#0071e3;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
-.btn:hover{background:#0077ED}
-.btn:active{transform:scale(.98)}
-.chat{height:360px;overflow-y:auto;padding:16px;background:#f5f5f7;border-radius:16px;margin-bottom:12px}
-.msg{max-width:75%;margin-bottom:8px;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.4}
-.msg.me{background:#0071e3;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
-.msg.bot{background:#fff;border:1px solid #e5e5e5;border-bottom-left-radius:4px}
-.msg .name{font-size:.7em;font-weight:600;margin-bottom:4px;opacity:.7}
+:root{--bg:#fff;--card:#f5f5f7;--card2:#fff;--border:#e5e5e5;--text:#1d1d1f;--dim:#86868b;--accent:#0071e3;--green:#34c759;--input:#fff;--chat:#f5f5f7}
+[data-theme="dark"]{--bg:#0a0a0a;--card:#141414;--card2:#1a1a1a;--border:#222;--text:#e0e0e0;--dim:#666;--accent:#0071e3;--green:#34c759;--input:#141414;--chat:#111}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh}
+nav{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.logo{font-weight:700;font-size:1.1em;letter-spacing:-.5px}
+.nav-right{display:flex;gap:8px;align-items:center}
+.theme-btn{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;color:var(--text);transition:all .2s}
+.theme-btn:hover{border-color:var(--accent)}
+.theme-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.badge{background:var(--green);color:#fff;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:600}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 24px;display:grid;grid-template-columns:1fr 300px;gap:20px}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}.side{display:none}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.card h3{font-size:.75em;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.val{font-size:1.8em;font-weight:700;letter-spacing:-1px}
+label{font-size:.72em;font-weight:500;color:var(--dim);display:block;margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;outline:none;background:var(--input);color:var(--text);font-family:inherit;transition:border .2s}
+input:focus,select:focus{border-color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:scale(.97)}
+.chat{height:340px;overflow-y:auto;padding:14px;background:var(--chat);border-radius:14px;margin-bottom:10px}
+.msg{max-width:78%;margin-bottom:6px;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.45}
+.msg.me{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.msg.bot{background:var(--card2);border:1px solid var(--border);border-bottom-left-radius:4px}
 .row{display:flex;gap:8px}
-.input{flex:1;padding:12px 16px;border:1px solid #d2d2d7;border-radius:24px;font-size:14px;outline:none;font-family:inherit}
-.input:focus{border-color:#0071e3}
-.send{width:44px;height:44px;border-radius:50%;background:#0071e3;color:#fff;border:none;cursor:pointer;font-size:18px}
-.send:hover{background:#0077ED}
-.side .card{padding:16px}
-.item{padding:10px 12px;border-radius:10px;font-size:13px;cursor:pointer;transition:background .15s}
-.item:hover{background:#f5f5f7}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#34c759;margin-right:8px}
-.dot.off{background:#d2d2d7}
-input[type=password]{font-family:monospace}
+.input{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;background:var(--input);color:var(--text)}
+.input:focus{border-color:var(--accent)}
+.btn-send{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:16px}
+.item{padding:10px;border-radius:10px;font-size:13px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:space-between}
+.item:hover{background:var(--card)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.dot.idle{background:var(--dim)}
+select option{background:var(--card);color:var(--text)}
 </style>
 </head>
 <body>
 <nav>
 <div class="logo">AgentSwarp</div>
+<div class="nav-right">
 <span class="badge">● Online</span>
+<button class="theme-btn active" onclick="setTheme('light')">Light</button>
+<button class="theme-btn" onclick="setTheme('dark')">Dark</button>
+<button class="theme-btn" onclick="setTheme('system')">System</button>
+</div>
 </nav>
-<div class="container">
+<div class="wrap">
 <div>
-<div class="chat" id="chat">
-<div class="msg bot"><div class="name">Agent</div>Ready. What should I build?</div>
-</div>
-<div class="row">
-<input class="input" id="msg" placeholder="Type a goal or question..." onkeypress="if(event.key==='Enter')send()">
-<button class="send" onclick="send()">→</button>
-</div>
-<div class="card">
-<h3>Tasks</h3>
+<div class="chat" id="chat"><div class="msg bot"><b>Agent</b><br>Ready. What should I build?</div></div>
+<div class="row"><input class="input" id="msg" placeholder="Type a goal..." onkeypress="if(event.key==='Enter')send()"><button class="btn-send" onclick="send()">→</button></div>
+<div class="card"><h3>Tasks</h3>
 <div class="item"><span class="dot"></span>Research AI trends</div>
-<div class="item"><span class="dot off"></span>Build landing page <span class="badge" style="float:right">done</span></div>
-<div class="item"><span class="dot"></span>Deploy to GitHub</div>
+<div class="item"><span class="dot"></span>Build landing page</div>
+<div class="item"><span class="dot idle"></span>Deploy to GitHub <span class="badge">done</span></div>
 </div>
 </div>
 <div class="side">
-<div class="card">
-<h3>Model</h3>
+<div class="card"><h3>Model</h3>
 <label>Provider</label>
-<select id="prov"><option value="openrouter">OpenRouter</option><option value="groq">Groq</option><option value="ollama">Ollama</option></select>
+<select><option>OpenRouter</option><option>Groq</option><option>Ollama</option></select>
 <label>Model ID</label>
-<input type="text" id="model" value="openrouter/healer-alpha">
+<input value="openrouter/healer-alpha">
 <label>API Key</label>
-<input type="password" id="key" value="sk-or-v1-...">
+<input type="password" value="sk-...">
 </div>
-<div class="card">
-<h3>Skills</h3>
-<div class="item">🔍 Web Search</div>
-<div class="item">💻 Shell Execute</div>
-<div class="item">📁 File System</div>
-<div class="item">🐙 GitHub Push</div>
-<div class="item">🌐 Browser</div>
-<div class="item">📧 Email Send</div>
+<div class="card"><h3>Skills</h3>
+<div class="item">🔍 Web Search <span class="dot"></span></div>
+<div class="item">💻 Shell Exec <span class="dot"></span></div>
+<div class="item">📁 Files <span class="dot"></span></div>
+<div class="item">🐙 GitHub <span class="dot"></span></div>
+<div class="item">🌐 Browser <span class="dot"></span></div>
 </div>
-<div class="card">
-<h3>Config</h3>
-<label>Max Tasks/Hour</label>
-<input type="number" value="99999">
-<label>Allowed</label>
-<input type="text" value="* (everything)">
-<label>Workspace</label>
-<input type="text" value="/home/ubuntu/.zeroclaw">
+<div class="card"><h3>Memory</h3>
+<div class="item">Short-term ✅</div>
+<div class="item">SQLite ✅</div>
+<div class="item">Pinecone 🔧</div>
 </div>
 </div>
 </div>
 <script>
-var chat=document.getElementById('chat');
+function setTheme(t){
+document.documentElement.setAttribute('data-theme',t);
+document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+localStorage.setItem('theme',t);
+}
+var saved=localStorage.getItem('theme');
+if(saved){document.documentElement.setAttribute('data-theme',saved);}
 function send(){var m=document.getElementById('msg').value;if(!m)return;
-chat.innerHTML+='<div class=\"msg me\">'+m+'</div>';
+var c=document.getElementById('chat');
+c.innerHTML+=<div class="msg me">'+m+'</div>';
 document.getElementById('msg').value='';
-chat.scrollTop=chat.scrollHeight;
-fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:m})}).then(r=>r.json()).then(d=>{chat.innerHTML+='<div class=\"msg bot\"><div class=\"name\">Agent</div>Task '+d.id.slice(0,8)+' created</div>';chat.scrollTop=chat.scrollHeight;}).catch(e=>{chat.innerHTML+='<div class=\"msg bot\">Error: '+e.message+'</div>';});
+c.scrollTop=c.scrollHeight;
+fetch('/api/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({goal:m})}).then(r=>r.json()).then(d=>{c.innerHTML+='<div class="msg bot"><b>Agent</b><br>Task '+d.id.slice(0,8)+' added</div>';c.scrollTop=c.scrollHeight;}).catch(e=>{c.innerHTML+='<div class="msg bot">Error</div>';});
 }
 </script>
 </body>
