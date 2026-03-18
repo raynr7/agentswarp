@@ -4,7 +4,11 @@ import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { BrainCircuit, Activity, Network, Code2, Zap, Settings, Command } from 'lucide-react';
 import Lenis from '@studio-freight/lenis';
-import SwarmVisualizer from '../components/visualizer/SwarmVisualizer';
+import dynamic from 'next/dynamic';
+
+const SwarmVisualizer = dynamic(() => import('../components/visualizer/SwarmVisualizer'), {
+  ssr: false,
+});
 
 export default function Dashboard() {
   const controls = useAnimation();

@@ -1,0 +1,4 @@
+fastapi==0.111.0
+uvicorn==0.29.0
+mcp>=0.6.0
+pydantic==2.7.1
