@@ -40,8 +40,8 @@ export default function SettingsPage() {
               <div className="input-group"><label className="label">Workspace Name</label><input defaultValue="AgentSwarp Studio" /></div>
               <div className="input-group"><label className="label">Agent Tick Interval (seconds)</label><input type="number" defaultValue={20} /></div>
               <div className="input-group"><label className="label">Default Persona</label>
-                <select>
-                  <option>GravityClaw</option><option>Elon Mode</option><option>SRK Mode</option><option>Rayn Mode</option>
+                <select className="w-full bg-black border border-white/10 rounded px-2 py-1 text-xs">
+                  <option>Precise</option><option>Builder</option><option>Analyst</option><option>Creative</option>
                 </select>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap: 8 }}>

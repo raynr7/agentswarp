@@ -63,17 +63,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Brand */}
             <div style={{ padding: '12px 14px 10px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 9 }}>
               <div style={{ width: 28, height: 28, borderRadius: 7, background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 12px rgba(124,58,237,0.35)' }}>
-                {/* Swarm icon inline */}
-                <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
-                  <circle cx="9"  cy="16" r="3" fill="#a78bfa"/>
-                  <circle cx="17" cy="8"  r="3" fill="#818cf8"/>
-                  <circle cx="23" cy="16" r="3" fill="#a78bfa"/>
-                  <circle cx="17" cy="24" r="3" fill="#818cf8"/>
-                  <circle cx="16" cy="16" r="2" fill="#fff"/>
-                  <line x1="9"  y1="16" x2="16" y2="16" stroke="#a78bfa" strokeWidth="1.4" strokeOpacity=".8"/>
-                  <line x1="17" y1="8"  x2="16" y2="16" stroke="#818cf8" strokeWidth="1.4" strokeOpacity=".8"/>
-                  <line x1="23" y1="16" x2="16" y2="16" stroke="#a78bfa" strokeWidth="1.4" strokeOpacity=".8"/>
-                  <line x1="17" y1="24" x2="16" y2="16" stroke="#818cf8" strokeWidth="1.4" strokeOpacity=".8"/>
+                {/* Sharp Achromatic Swarm / S-Glyph icon */}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="#ffffff" strokeWidth="1.5" strokeLinejoin="round"/>
+                  <path d="M12 6L8 8.5V15.5L12 18L16 15.5V8.5L12 6Z" fill="#7c3aed" fillOpacity="0.8"/>
+                  <circle cx="12" cy="12" r="2" fill="#ffffff"/>
                 </svg>
               </div>
               <div>

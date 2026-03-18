@@ -5,7 +5,7 @@ import { Brain, Search, Trash2, Database, ChevronRight } from 'lucide-react';
 const DEMO_MEM = [
   { id: '1', tier: 'short', key:'last_goal',     val:'Find competitor pricing',   ts: Date.now()-60000  },
   { id: '2', tier: 'long',  key:'user.name',     val:'Admin',                      ts: Date.now()-900000 },
-  { id: '3', tier: 'long',  key:'user.persona',  val:'GravityClaw',                ts: Date.now()-900000 },
+  { id: '3', tier: 'long',  key:'user.persona',  val:'Agent Swarp',             ts: Date.now()-900000 },
   { id: '4', tier: 'vector',key:'doc:001',        val:'AgentSwarp documentation…', ts: Date.now()-3600000},
 ];
 

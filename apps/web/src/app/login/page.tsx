@@ -47,7 +47,7 @@ export default function LoginPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-white">AgentSwarp</h1>
-              <p className="text-xs text-white/40">GravityClaw Engine v3</p>
+              <p className="text-xs text-white/40">Agent Swarp Engine v0.3.7</p>
             </div>
           </div>
 

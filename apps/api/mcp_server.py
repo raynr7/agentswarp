@@ -5,7 +5,7 @@ import mcp.types as types
 
 # Initialize the AgentSwarp MCP Server
 # Allows external systems (like Claude Desktop) to invoke AgentSwarp capabilities natively.
-app = Server("AgentSwarp-GravityClaw-MCP")
+app = Server("AgentSwarp-MCP")
 
 @app.list_tools()
 async def list_tools() -> list[types.Tool]:
@@ -47,7 +47,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
             text=f"Dispatched command '{action}' to agent [ID: {agent_id}] successfully."
         )]
     
-    raise ValueError(f"GravityClaw Engine unrecognized tool: {name}")
+    raise ValueError(f"Agent Swarp Engine unrecognized tool: {name}")
 
 async def main():
     # Start the server using stdio for standard MCP integrations

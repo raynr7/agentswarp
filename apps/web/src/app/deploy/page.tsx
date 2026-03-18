@@ -19,11 +19,11 @@ const SKILLS = [
   { id: 'design_eng',  icon: '🎨', label: 'Design Engineer', desc: 'Zero-shot UI/UX generation and iteration.' },
 ];
 
-const PERSONALITIES = [
-  { key: 'default', label: '🤖 GravityClaw', desc: 'Concise, autonomous, efficient.' },
-  { key: 'elon',    label: '🚀 Elon Mode',   desc: 'First-principles, ship fast.' },
-  { key: 'srk',     label: '🎬 SRK Mode',    desc: 'Passionate and inspirational.' },
-  { key: 'rayn',    label: '⚡ Rayn Mode',   desc: 'Ambitious builder.' },
+const PERSONAS = [
+  { key: 'precise',  label: '🤖 Precise',   desc: 'Concise, autonomous, efficient.' },
+  { key: 'builder',  label: '🚀 Builder',   desc: 'First-principles, ship fast.' },
+  { key: 'analyst',  label: '📊 Analyst',   desc: 'Data-driven, thorough reasoning.' },
+  { key: 'creative', label: '🎨 Creative',  desc: 'Exploratory, open-ended thinking.' },
 ];
 
 export default function DeployAgentPage() {
@@ -98,13 +98,18 @@ export default function DeployAgentPage() {
         {/* Personality */}
         <section className="glass-panel rounded-2xl p-6 space-y-4">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-white/40">Personality Engine</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {PERSONALITIES.map(p => (
-              <button key={p.key} type="button" onClick={() => setPersonality(p.key)}
-                className={`text-left p-4 rounded-xl border transition-all ${personality === p.key ? 'border-cyan-500/50 bg-cyan-500/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {PERSONAS.map((p) => (
+              <button
+                key={p.key}
+                type="button"
+                onClick={() => setPersonality(p.key)}
+                className={`flex flex-col items-center p-3 rounded-xl border text-center transition-all ${
+                  personality === p.key ? 'bg-purple-600/20 border-purple-500 shadow-[0_0_15px_rgba(147,51,234,0.3)]' : 'bg-black/40 border-white/5 hover:border-white/10'
+                }`}
               >
-                <div className="font-medium text-sm">{p.label}</div>
-                <div className="text-xs text-white/40 mt-1">{p.desc}</div>
+                <div className="text-xl mb-1">{p.label.split(' ')[0]}</div>
+                <div className="text-[10px] font-bold text-white uppercase tracking-wider">{p.label.split(' ').slice(1).join(' ') || p.label}</div>
               </button>
             ))}
           </div>

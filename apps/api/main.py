@@ -16,7 +16,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 
 # ── JWT ──────────────────────────────────────────────────────────────────────
-JWT_SECRET = "gravityclaw-change-in-prod"
+JWT_SECRET = "agentswarp-secure-key-037"
 
 def _b64url(data: bytes) -> str:
     return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
@@ -55,10 +55,10 @@ def vector_upsert(agent_id: str, content: str):
 
 # ── Personality Engine ────────────────────────────────────────────────────────
 PERSONALITIES = {
-    "default": {"name":"GravityClaw","prompt":"You are a concise, autonomous AI engine."},
-    "elon":    {"name":"Elon Mode",  "prompt":"First principles. Ship fast. Be blunt."},
-    "srk":     {"name":"SRK Mode",   "prompt":"Passionate, dramatic, inspirational."},
-    "rayn":    {"name":"Rayn Mode",  "prompt":"Ambitious builder. Move fast."},
+    "precise":  {"name":"Precise",  "prompt":"You are a concise, autonomous AI engine."},
+    "builder":  {"name":"Builder",  "prompt":"First principles. Ship fast. Be blunt."},
+    "analyst":  {"name":"Analyst",  "prompt":"Data-driven, thorough, analytical reasoning."},
+    "creative": {"name":"Creative", "prompt":"Creative, exploratory, expansive thinking."},
 }
 
 # ── Autonomous Loop ───────────────────────────────────────────────────────────
