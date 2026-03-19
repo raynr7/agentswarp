@@ -38,22 +38,24 @@
     {
       section: 'AGENTS',
       links: [
-        { href: '/', icon: 'Ã¢ÂÂ¦', label: 'Dashboard' },
-        { href: '/agents', icon: 'Ã¢ÂÂ', label: 'Agents' },
+        { href: '/', icon: 'ÃÂ¢ÃÂÃÂ¦', label: 'Dashboard' },
+        { href: '/agents', icon: 'ÃÂ¢ÃÂÃÂ', label: 'Agents' },
+        { href: '/chat', icon: 'ð¬', label: 'Chat' },
       ],
     },
     {
       section: 'WORKSPACE',
       links: [
-        { href: '/memory', icon: 'Ã¢ÂÂ', label: 'Memory' },
-        { href: '/integrations', icon: 'Ã¢ÂÂ³', label: 'Integrations' },
-        { href: '/skills', icon: 'Ã¢ÂÂ', label: 'Skills' },
+        { href: '/memory', icon: 'ÃÂ¢ÃÂÃÂ', label: 'Memory' },
+        { href: '/integrations', icon: 'ÃÂ¢ÃÂÃÂ³', label: 'Integrations' },
+        { href: '/skills', icon: 'ÃÂ¢ÃÂÃÂ', label: 'Skills' },
+        { href: '/vibe', icon: 'â¨', label: 'Vibe Coder' },
       ],
     },
     {
       section: 'SYSTEM',
       links: [
-        { href: '/settings', icon: 'Ã¢ÂÂ', label: 'Settings' },
+        { href: '/settings', icon: 'ÃÂ¢ÃÂÃÂ', label: 'Settings' },
       ],
     },
   ];
@@ -68,6 +70,20 @@
   function toggleTheme() {
     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   }
+
+  $effect(() => {
+    if (typeof window === 'undefined') return
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === '.') {
+        e.preventDefault()
+        const path = window.location.pathname
+        if (path === '/vibe') history.back()
+        else window.location.href = '/vibe'
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  })
 </script>
 
 <div class="layout">
@@ -111,9 +127,9 @@
         type="button"
       >
         {#if currentTheme === 'dark'}
-          Ã¢ÂÂ Light mode
+          ÃÂ¢ÃÂÃÂ Light mode
         {:else}
-          Ã°ÂÂÂ Dark mode
+          ÃÂ°ÃÂÃÂÃÂ Dark mode
         {/if}
       </button>
       <p class="search-hint">Cmd+K for search</p>
